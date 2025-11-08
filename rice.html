@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Rice POS System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="rice.css">
+</head>
+<body>
+
+<!-- ==================== FRONT PAGE (For Guests) ==================== -->
+<div id="frontPage" class="page">
+    <header>
+      <div class="brand">
+        <div class="logo">RP</div>
+        <div><div style="font-weight:700">Rice POS System</div></div>
+      </div>
+      <nav id="navBtns">
+        <button class="ghost" id="loginBtn">Login</button>
+        <button class="primary" id="signupBtn">Sign up</button>
+      </nav>
+    </header>
+    <main class="container">
+      <h2>Welcome! Please log in or sign up to continue.</h2>
+    </main>
+</div>
+
+<!-- ==================== BUYER DASHBOARD ==================== -->
+<div id="buyerDashboard" class="page">
+    <header>
+        <div class="brand">
+          <div class="logo">B</div>
+          <div><div style="font-weight:700">Buyer Dashboard</div></div>
+        </div>
+        <nav>
+          <div id="buyerUsername" class="user-display"></div>
+          <button class="primary" id="viewCartBtn" style="display:none">View Cart (0)</button>
+          <button class="ghost" id="logoutBuyerBtn">Logout</button>
+        </nav>
+    </header>
+    <main class="container">
+        <h3>Available Rice</h3>
+        <div id="list" class="grid"></div>
+        <div class="order-sections">
+            <div class="pending-section">
+                <h3>Pending Orders</h3>
+                <div id="buyerPendingOrders"></div>
+            </div>
+            <div class="completed-section">
+                <h3>Order History</h3>
+                <div id="buyerCompletedOrders"></div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- ==================== SELLER DASHBOARD ==================== -->
+<div id="sellerPage" class="page">
+    <header>
+        <div class="brand">
+          <div class="logo">S</div>
+          <div><div style="font-weight:700">Seller Dashboard</div></div>
+        </div>
+        <nav>
+            <div id="sellerUsername" class="user-display"></div>
+            <button class="ghost" id="logoutSellerBtn">Logout</button>
+        </nav>
+    </header>
+    <main class="container">
+        <div class="card">
+            <h3>Store Information</h3>
+            <div>
+                <input type="text" id="storeName" placeholder="Store Name" />
+                <input type="text" id="storeOwner" placeholder="Owner Name (Old)" />
+                <input type="text" id="contact" placeholder="Primary Contact #" /> <!-- Bag-o -->
+                <input type="text" id="address" placeholder="Store Address" /> <!-- Bag-o -->
+                <input type="text" id="fulfillmentOption" placeholder="Fulfillment Options (e.g., Delivery, Pickup)" /> <!-- Bag-o -->
+                <input type="text" id="storeContact" placeholder="Store Contact (Old)" />
+                <input type="email" id="storeEmail" placeholder="Store Email (Old)" />
+                <input type="text" id="storeDesc" placeholder="Store Description" />
+                <button class="primary" id="saveStoreBtn">Save Store Info</button>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Add New Rice</h3>
+            <form id="addRiceForm">
+                <input type="text" id="newRiceName" placeholder="Rice Name" required />
+                <input type="text" id="newRiceType" placeholder="Rice Type (e.g., Well-milled)" /> <!-- Bag-o -->
+                <input type="text" id="newRicePackaging" placeholder="Packaging (e.g., 25kg Sack)" /> <!-- Bag-o -->
+                <input type="number" id="newRicePrice" placeholder="Price per Package" step="0.01" required />
+                <input type="number" id="newRicePerKilo" placeholder="Price per kilo (optional)" step="0.01" />
+                <input type="number" id="newRiceStock" placeholder="Stock Quantity (optional)" step="1" /> <!-- Bag-o -->
+                <input type="text" id="newRiceDesc" placeholder="Description (optional)" />
+                <label for="riceImage" style="font-size: 14px; color: var(--muted); margin-top: 8px;">Product Image (Optional)</label>
+                <input type="file" id="riceImage" accept="image/png, image/jpeg, image/gif" style="padding: 10px; border: 1px solid #ccc; border-radius: 12px;"/>
+                <select id="riceOption" style="margin-top: 8px;">
+                    <option value="deliver">For Delivery</option>
+                    <option value="pickup">For Pickup</option>
+                </select>
+                <button type="button" class="primary" id="addRiceBtn" style="margin-top: 16px;">Add Rice</button>
+            </form>
+        </div>
+        <div class="card">
+            <h3>My Products and Orders</h3>
+            <h4>My Rice List</h4>
+            <div id="sellerRiceList"></div>
+            <h4>Pending Orders</h4>
+            <div id="pendingOrders"></div>
+            <h4>Completed/Cancelled Orders</h4> <!-- Gi-update ang title -->
+            <div id="completedOrders"></div>
+        </div>
+    </main>
+</div>
+
+<!-- ==================== ADMIN DASHBOARD ==================== -->
+<div id="adminPage" class="page">
+    <header>
+        <div class="brand">
+          <div class="logo">A</div>
+          <div><div style="font-weight:700">Admin Dashboard</div></div>
+        </div>
+        <nav>
+            <div id="adminUsername" class="user-display"></div>
+            <button class="ghost" id="logoutAdminBtn">Logout</button>
+        </nav>
+    </header>
+    <main class="container">
+        <div class="card">
+          <h3>Registered Stores</h3>
+          <div id="adminStoreInfo">No stores registered.</div>
+        </div>
+        <div class="card">
+          <h3>All Products</h3>
+          <div id="adminProductList" class="grid"></div>
+        </div>
+        <div class="card">
+          <h3>All Completed/Cancelled Orders</h3> <!-- Gi-update ang title -->
+          <div id="adminCompletedOrders"></div>
+        </div>
+    </main>
+</div>
+
+<!-- ==================== MODAL (Pop-up) ==================== -->
+<div class="modal-back" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <!-- Temporary div for padding -->
+         <div style="padding: 10px 20px;">
+             <div id="modalTitle" style="font-weight:700;">Modal</div>
+         </div>
+        <button id="closeModal" class="ghost" style="margin: 10px;">Close</button>
+      </div>
+       <!-- Make sure modalBody exists -->
+      <div id="modalBody" style="padding: 0 20px 20px 20px;"></div>
+    </div>
+</div>
+
+
+<!-- ==================== SCRIPT LOADING ORDER (IMPORTANTE) ==================== -->
+<script src="api.js"></script>
+<script src="auth.js"></script>
+<script src="product.js"></script>
+<script src="buyer.js"></script>
+<script src="seller.js"></script>
+<script src="admin.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
