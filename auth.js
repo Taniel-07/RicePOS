@@ -20,6 +20,10 @@ const AuthManager = {
         }
     },
 
+    // RPOS/auth.js
+
+// ... (ang ubang code sa AuthManager)
+
     showLoginModal: (prefillUsername = "", prefillPassword = "") => {
         const content = `
             <div class="modal-content-container">
@@ -41,9 +45,24 @@ const AuthManager = {
         // Use showModal utility
         showModal("", content); // Pass empty string for title to hide default modal title
 
-        document.getElementById("doLogin").addEventListener("click", AuthManager.login);
+        // ----------------------------------------------------
+        // GI-AYO KINI NGA BAHIN ARON MASIGURADO NGA NAKAKITA ANG BUTTON
+        // ----------------------------------------------------
+        // Gi-gamit ang setTimeout aron mahatagan og gamay nga oras ang DOM nga makita ang button
+        setTimeout(() => {
+            const loginButton = document.getElementById("doLogin");
+            if (loginButton) {
+                loginButton.addEventListener("click", AuthManager.login);
+            } else {
+                console.error("Error: Could not find 'doLogin' button to attach event listener.");
+            }
+        }, 50); // Mubo nga delay (50ms)
+        // ----------------------------------------------------
+
         AuthManager.addPasswordToggleListener('loginPassword');
     },
+
+// ... (ang ubang code sa AuthManager)
 
     login: async () => {
         const username = document.getElementById("loginUsername").value;

@@ -12,10 +12,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 function send_notification_email($recipientEmail, $recipientName, $subject, $body) {
     // --- Google SMTP Configuration (Kinahanglan nimo ilisan ni) ---
     $smtp_host = 'smtp.gmail.com';
-    $smtp_username = 'alexispiraman@gmail.com'; // Imong Gmail Address
-    $smtp_password = 'xyip gnii zrqw zmvs'; // Imong Gmail App Password
+    $smtp_username = 'nathanielpiraman@gmail.com'; // Imong Gmail Address
+    $smtp_password = 'hptf btyv vetj rktl'; // Imong Gmail App Password
     $smtp_port = 587; // O 465 kung gamiton ang SMTPSecure = 'ssl'
-    $from_email = 'alexispiraman@gmail.com'; 
+    $from_email = 'nathanielpiraman@gmail.com'; 
     $from_name = 'The Equilibrium Syntax';
     // -------------------------------------------------------------
 

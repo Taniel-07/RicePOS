@@ -1,80 +1,61 @@
+// RPOS/api.js
+
 const API = {
     // Kini para sa JSON data
     async fetchJSON(url, options = {}) {
         const defaultOptions = {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+            headers: {
+                'Content-Type': 'application/json',
+            },
         };
+
         const config = { ...defaultOptions, ...options };
-        if (config.body) {
+
+        if (config.body && typeof config.body === 'object') {
             config.body = JSON.stringify(config.body);
         }
 
         try {
             const response = await fetch(url, config);
-            if (!response.ok) { // Check for non-2xx responses
-                 // Attempt to parse error JSON, fallback to status text
-                try {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || response.statusText);
-                } catch (e) {
-                     throw new Error(response.statusText);
-                }
+            const data = await response.json();
+
+            // I-check kung ang HTTP status kay error (e.g., 400, 500)
+            if (!response.ok) {
+                // Kon sayop ang status, ibalik ang error gikan sa server
+                return { success: false, message: data.message || `HTTP Error: ${response.status}` };
             }
-             // Check if response is actually JSON before parsing
-             const contentType = response.headers.get("content-type");
-             if (contentType && contentType.indexOf("application/json") !== -1) {
-                return response.json();
-             } else {
-                 // Handle non-JSON responses if necessary, or throw an error
-                 console.warn("Received non-JSON response from API:", await response.text());
-                 // Allow non-JSON for setup.php which returns text/plain
-                 if (!url.endsWith('setup.php')) {
-                     throw new Error("Received non-JSON response from API.");
-                 } else {
-                     return { success: true, message: "Setup script likely executed.", data: null }; // Assume success for setup script text output
-                 }
-             }
+
+            return data; // Ang PHP backend dapat mo-return na sa { success: true, data: ... }
         } catch (error) {
-            console.error('API Fetch JSON Error:', error);
-            alert(`Error: ${error.message}`);
-            return { success: false, message: error.message, data: null };
+            console.error('API Error:', error);
+            // I-handle ang network errors or JSON parsing errors
+            return { success: false, message: 'Network or server error occurred. Check if your XAMPP/WAMP is running.' };
         }
     },
 
     // Function para sa file upload
     async fetchWithFile(url, formData) {
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                body: formData
-            });
-             if (!response.ok) {
-                try {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || response.statusText);
-                } catch (e) {
-                     throw new Error(response.statusText);
-                }
+            const response = await fetch(url, { method: 'POST', body: formData });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
             }
-              // Check if response is actually JSON before parsing
-             const contentType = response.headers.get("content-type");
-             if (contentType && contentType.indexOf("application/json") !== -1) {
-                return response.json();
-             } else {
-                 console.warn("Received non-JSON response from file upload API:", await response.text());
-                 throw new Error("Received non-JSON response from file upload API.");
-             }
+
+            return await response.json();
         } catch (error) {
-            console.error('API File Upload Error:', error);
-            alert(`Error: ${error.message}`);
-            return { success: false, message: error.message, data: null };
+            console.error('File Upload Error:', error);
+            return { success: false, message: error.message || 'Server did not return valid JSON after file upload.' };
         }
     },
 
     // --- Auth ---
     login: (username, password) => API.fetchJSON('api/login.php', { method: 'POST', body: { username, password } }),
     signup: (userData) => API.fetchJSON('api/signup.php', { method: 'POST', body: userData }),
+
+    // --- Users/Admin Management ---
+    deleteUser: (id) => API.fetchJSON('api/user_delete.php', { method: 'POST', body: { id } }),
 
     // --- Products ---
     getProducts: () => API.fetchJSON('api/products_get.php'),
