@@ -1,4 +1,5 @@
 <?php
+//kweny
 // seed_all.php
 // I-ON ang FULL ERROR DISPLAY
 ini_set('display_errors', 1);
